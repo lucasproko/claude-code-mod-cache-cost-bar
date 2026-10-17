@@ -1,0 +1,15 @@
+{
+  "name": "lucasproko-plugins",
+  "owner": {
+    "name": "Luke Prokopiak"
+  },
+  "plugins": [
+    {
+      "name": "usage-band-plus",
+      "source": "./"
+    }
+  ],
+  "metadata": {
+    "description": "Claude Code plugins by Luke Prokopiak"
+  }
+}

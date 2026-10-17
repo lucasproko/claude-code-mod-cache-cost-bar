@@ -1,0 +1,101 @@
+{
+  "name": "usage-band-plus",
+  "version": "0.4.0",
+  "description": "Context fill, session cost and prompt-cache countdown in the prompt footer, a 5-minute cache warning with Compact or Let it expire, /usage-band to explain the numbers, and /handoff. Based on Rishit Gupta's usage-band.",
+  "author": {
+    "name": "Luke Prokopiak"
+  },
+  "license": "MIT",
+  "keywords": [
+    "status",
+    "usage",
+    "cost",
+    "context",
+    "cache",
+    "rate-limit"
+  ],
+  "types": "./types/index.d.ts",
+  "userConfig": {
+    "placement": {
+      "type": "string",
+      "title": "Placement",
+      "description": "footer puts context, cost and cache countdown in the prompt footer. band puts them in a row above the prompt.",
+      "options": [
+        "footer",
+        "band"
+      ],
+      "default": "footer"
+    },
+    "contextWarnPercent": {
+      "type": "number",
+      "title": "Context warning %",
+      "description": "The context bar turns amber at this fill.",
+      "default": 50,
+      "min": 1,
+      "max": 100
+    },
+    "contextCritPercent": {
+      "type": "number",
+      "title": "Context critical %",
+      "description": "The context bar turns red at this fill.",
+      "default": 80,
+      "min": 1,
+      "max": 100
+    },
+    "showCache": {
+      "type": "boolean",
+      "title": "Show prompt cache",
+      "description": "Show the prompt-cache countdown and hit rate.",
+      "default": true
+    },
+    "showCost": {
+      "type": "boolean",
+      "title": "Show cost",
+      "description": "Show the session cost and the cost of the last turn.",
+      "default": true
+    },
+    "cacheTtl": {
+      "type": "string",
+      "title": "Prompt cache TTL",
+      "description": "auto reads the TTL the API wrote from the transcript (macOS and Linux). 1h or 5m fixes it.",
+      "options": [
+        "auto",
+        "1h",
+        "5m"
+      ],
+      "default": "auto"
+    },
+    "cacheNudgeMinutes": {
+      "type": "number",
+      "title": "Cache expiry prompt (minutes)",
+      "description": "This many minutes before a warm cache expires, send a notification and offer Compact or Let it expire. 0 turns it off.",
+      "default": 5,
+      "min": 0,
+      "max": 30
+    },
+    "handoffMode": {
+      "type": "string",
+      "title": "Handoff writer",
+      "description": "fork asks the session's own model over the cached transcript; it costs more when the cache is cold, and falls back to haiku on an API error. haiku sends message text and tool calls to Haiku, which is cheaper but sees less.",
+      "options": [
+        "fork",
+        "haiku"
+      ],
+      "default": "fork"
+    },
+    "handoffAtPercent": {
+      "type": "number",
+      "title": "Suggest handoff at context %",
+      "description": "The Handoff button is highlighted from this context fill. 0 turns it off.",
+      "default": 80,
+      "min": 0,
+      "max": 100
+    },
+    "confirmHandoff": {
+      "type": "boolean",
+      "title": "Confirm handoff",
+      "description": "Handoff asks for a second press before it clears the session.",
+      "default": true
+    }
+  }
+}
