@@ -240,6 +240,39 @@ test('five minutes before expiry: one alert and a Compact or Let it expire row',
   await band.unmount()
 })
 
+const notifierRuns = (on: On, hostSessionId: string | undefined) => {
+  const runs: string[][] = []
+  on('env.get', () => ({ value: hostSessionId }))
+  on('process.run', ($, e) => {
+    runs.push([...e.argv])
+    return { value: { exitCode: 0, stdout: '', stderr: '', isStdoutTruncated: false, isStderrTruncated: false } }
+  })
+  return runs
+}
+
+for (const [label, hostSessionId] of [
+  ['opens this session', 'local_e33f3945-c471-4cc4-b672-c88eded734fb'],
+  ['only activates the app without a session id', undefined],
+] as const) {
+  test(`expiry notification click ${label}`, async ($, on) => {
+    const { clock, runStep } = stubSession(on)
+    const runs = notifierRuns(on, hostSessionId)
+    await startSession($)
+    await runStep($, { hitPct: 90 })
+    await clock.advance(HOUR_MS - 4 * 60 * 1000)
+
+    const notifier = runs.find(argv => argv.includes('fr.julienxx.oss.terminal-notifier'))
+    expect(notifier).toBeDefined()
+    if (hostSessionId) {
+      expect(notifier).toContain(`claude://code/continue?session=${hostSessionId}`)
+    } else {
+      expect(notifier).not.toContain('-open')
+      expect(notifier).toContain('com.anthropic.claudefordesktop')
+    }
+    expect(runs.some(argv => argv[0] === 'osascript')).toBe(false)
+  })
+}
+
 test('Let it expire hides the row for that cache', async ($, on) => {
   const { clock, runStep } = stubSession(on)
   await startSession($)

@@ -15,7 +15,7 @@ Three numbers in the prompt footer, beside the permission mode and the model: `3
 
 Type `/usage-band` for what each number means, with current values. The desktop footer draws text only (no Svg, no hover), so it cannot carry tooltips.
 
-Five minutes before a warm cache expires (contexts of 20k tokens or more), you get a toast and a macOS notification, and a row above the prompt offers **Compact** or **Let it expire**. On desktop, `$.ui.notify` has no channel, so the notification goes through `osascript`.
+Five minutes before a warm cache expires (contexts of 20k tokens or more), you get a toast and a macOS notification, and a row above the prompt offers **Compact** or **Let it expire**. On desktop, `$.ui.notify` has no channel, so the notification goes through [terminal-notifier](https://github.com/julienXX/terminal-notifier) when it is installed. A click on it opens the session that sent it. Without terminal-notifier, the notification goes through `osascript`, and macOS credits it to Script Editor, so a click opens Script Editor.
 
 Handoff appears above the prompt when context passes 80%. `/handoff` works at any time: it writes a handoff note, runs `/clear`, and puts the note (and your draft) in the prompt box.
 
@@ -38,6 +38,14 @@ claude plugin install usage-band-plus --marketplace lucasproko/usage-band-plus
 ```
 
 In the desktop app, where `/plugin` does not run: click + next to the prompt box, then Plugins, Add marketplace with `lucasproko/usage-band-plus`, then Add plugin.
+
+On macOS, also install terminal-notifier, so a click on the cache notification opens its session:
+
+```bash
+brew install terminal-notifier
+```
+
+The first notification asks to allow notifications from terminal-notifier. Set its alert style to Banners or Alerts in System Settings > Notifications.
 
 Start a new session afterwards. Settings are in the config menu under usage-band-plus.
 

@@ -357,12 +357,35 @@ async function refreshUsage($: $) {
 
 const appleScriptString = (text: string) => `"${text.replace(/\\/g, '\\\\').replace(/"/g, '\\"')}"`
 
+// The desktop app's deep link accepts only its own local_ session id, not the CLI's.
+async function readHostSessionId($: $) {
+  try {
+    const hostSessionId = await $.env.get('CLAUDE_CODE_HOST_SESSION_ID')
+    if (hostSessionId && /^local_[A-Za-z0-9-]{1,64}$/.test(hostSessionId)) return hostSessionId
+  } catch {}
+  return null
+}
+
 // The desktop app has no notification channel for plugins ($.ui.notify answers
-// no-surface there), so macOS gets the notification from osascript instead.
+// no-surface there). terminal-notifier can open this session on click; an
+// osascript notification belongs to Script Editor, so a click opens that instead.
+// terminal-notifier is started through LaunchServices: run as a child of the
+// Claude process, macOS refuses its notification permission.
 async function sendNotification($: $, title: string, text: string) {
   try {
     const sent = await $.ui.notify(text, { title })
     if (sent.isSent) return
+  } catch {}
+  const hostSessionId = await readHostSessionId($)
+  const clickArgs = hostSessionId
+    ? ['-open', `claude://code/continue?session=${hostSessionId}`, '-group', `usage-band-plus-${hostSessionId}`]
+    : ['-activate', 'com.anthropic.claudefordesktop']
+  try {
+    const r = await $.process.run([
+      'open', '-n', '-g', '-b', 'fr.julienxx.oss.terminal-notifier',
+      '--args', '-title', title, '-message', text, ...clickArgs,
+    ])
+    if (r.exitCode === 0) return
   } catch {}
   try {
     await $.process.run([
