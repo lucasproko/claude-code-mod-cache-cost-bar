@@ -21,12 +21,10 @@ Handoff appears above the prompt when context passes 80%. `/handoff` works at an
 
 ## Install
 
-The repository is private: you need read access on GitHub, and a git credential for github.com on your machine (an SSH key, or `gh auth login` then `gh auth setup-git`).
-
 At the prompt of a terminal Claude Code session:
 
 ```
-/plugin install usage-band-plus --marketplace lucasproko/usage-band-plus
+/plugin install usage-band-plus --marketplace lucasproko/claude-code-mod-cache-cost-bar
 ```
 
 Answer `y` to add the marketplace, then pick the user scope.
@@ -34,10 +32,10 @@ Answer `y` to add the marketplace, then pick the user scope.
 From a shell:
 
 ```bash
-claude plugin install usage-band-plus --marketplace lucasproko/usage-band-plus
+claude plugin install usage-band-plus --marketplace lucasproko/claude-code-mod-cache-cost-bar
 ```
 
-In the desktop app, where `/plugin` does not run: click + next to the prompt box, then Plugins, Add marketplace with `lucasproko/usage-band-plus`, then Add plugin.
+In the desktop app, where `/plugin` does not run: click + next to the prompt box, then Plugins, Add marketplace with `lucasproko/claude-code-mod-cache-cost-bar`, then Add plugin.
 
 On macOS, also install terminal-notifier, so a click on the cache notification opens its session:
 
