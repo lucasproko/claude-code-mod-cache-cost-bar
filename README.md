@@ -1,6 +1,9 @@
 # usage-band-plus
 
-Context, prompt cache and cost for Claude Code. Based on [usage-band](https://github.com/Rishit30G/usage-band) by Rishit Gupta (MIT).
+Context, prompt cache and cost for Claude Code.
+
+<img width="1648" height="272" alt="Screeshot-2026-10-16 at 19 05 22@2x" src="https://github.com/user-attachments/assets/40dbb58d-5741-429e-8f62-c4d5b3a75795" />
+
 
 Three numbers in the prompt footer, beside the permission mode and the model: `34% · ~$13.52 · 59m`.
 
