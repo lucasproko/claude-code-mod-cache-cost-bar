@@ -406,11 +406,22 @@ async function compactForCache($: $) {
   await update($, isCompactingAtom, () => true)
   try {
     const cacheAt = (await read($, cacheAtom))?.at ?? null
-    const result = await $.session.compact()
+    let result: Awaited<ReturnType<typeof $.session.compact>>
+    try {
+      result = await $.session.compact()
+    } catch {
+      // An SDK-hosted session (the desktop app) rejects $.session.compact:
+      // there, compaction runs only as a /compact prompt.
+      void $.prompt
+        .submit({ text: '/compact', asUser: true })
+        .catch(err => $.ui.toast(`Compact failed; the session is unchanged: ${String(err)}`))
+      await update($, dismissedCacheAtAtom, () => cacheAt)
+      return
+    }
     if ('skip' in result) $.ui.toast(`Compact skipped: ${result.skip}`)
     else await update($, dismissedCacheAtAtom, () => cacheAt)
-  } catch {
-    $.ui.toast('Compact failed; the session is unchanged')
+  } catch (err) {
+    $.ui.toast(`Compact failed; the session is unchanged: ${String(err)}`)
   } finally {
     await update($, isCompactingAtom, () => false)
   }

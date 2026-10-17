@@ -1,6 +1,6 @@
 {
   "name": "usage-band-plus",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "description": "Context fill, session cost and prompt-cache countdown in the prompt footer, a 5-minute cache warning with Compact or Let it expire, /usage-band to explain the numbers, and /handoff. Based on Rishit Gupta's usage-band.",
   "author": {
     "name": "Luke Prokopiak"
