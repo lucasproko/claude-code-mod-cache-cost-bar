@@ -411,9 +411,9 @@ async function compactForCache($: $) {
       result = await $.session.compact()
     } catch {
       // An SDK-hosted session (the desktop app) rejects $.session.compact:
-      // there, compaction runs only as a /compact prompt.
-      void $.prompt
-        .submit({ text: '/compact', asUser: true })
+      // there, compaction runs only as the /compact command.
+      void $.command
+        .run({ command: 'compact' })
         .catch(err => $.ui.toast(`Compact failed; the session is unchanged: ${String(err)}`))
       await update($, dismissedCacheAtAtom, () => cacheAt)
       return
